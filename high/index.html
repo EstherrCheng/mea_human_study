@@ -169,7 +169,7 @@ const CONFIG = {
   q1Share: 0.5,        // share of screens in each part that use question type q1
   datapipeId: "7zg2Ch5Y4F8T",      // DataPipe experiment ID (set with build_study.py --datapipe_id)
   submitUrl: "",       // HTTP backend for responses (set with build_study.py --submit_url)
-  completionCode: "MEA-STUDY-PILOT",
+  completionCode: "",  // only for crowdsourcing platforms (e.g. Prolific); empty = no code shown
   completionUrl: "",   // e.g. Prolific completion redirect
   studyVersion: "pilot-5_high",
 };
@@ -607,8 +607,9 @@ async function renderDone(app) {
     try { res = S.submitted ? "saved" : await saveResponses(payload); } catch (e) { res = "error"; }
     if (res === "saved" || res === "sent") {
       S.submitted = true; save();
-      $("#sub").textContent = "Your responses have been recorded.";
-      $("#codebox").hidden = false; if ($("#back")) $("#back").hidden = false;
+      $("#sub").textContent = "Your responses have been recorded. Thank you for taking part!";
+      if (CONFIG.completionCode) $("#codebox").hidden = false;
+      if ($("#back")) $("#back").hidden = false;
     } else if (res === "none") {
       $("#sub").textContent = "This copy of the study is not connected to a server, so your responses were not recorded. Please contact the research team.";
     } else {
